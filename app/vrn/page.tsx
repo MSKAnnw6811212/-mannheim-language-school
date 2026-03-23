@@ -69,9 +69,6 @@ export default function VRNPage() {
         ))}
       </div>
 
-      <div className="mt-10 p-4 bg-zinc-900 border border-zinc-800 rounded-2xl">
-        <p className="text-zinc-500 text-xs text-center">B1 Szenarien kommen bald 🔜</p>
-      </div>
     </main>
   );
 }

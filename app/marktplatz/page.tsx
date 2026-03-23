@@ -7,9 +7,10 @@ import { vocabulary } from '@/lib/vocabulary';
 import type { VocabCard } from '@/lib/vocabulary';
 import { markPracticeToday } from '@/lib/streak';
 
-const DECK = vocabulary.filter(v => v.level === 'A1');
+type LevelFilter = 'A1' | 'A2' | 'B1' | 'all';
 
 export default function MarktplatzSprint() {
+  const [selectedLevel, setSelectedLevel] = useState<LevelFilter | null>(null);
   const [index, setIndex] = useState(0);
   const [flipped, setFlipped] = useState(false);
   const [correct, setCorrect] = useState(0);
@@ -22,7 +23,14 @@ export default function MarktplatzSprint() {
   const greenOpacity = useTransform(x, [40, 130], [0, 0.55]);
   const redOpacity = useTransform(x, [-130, -40], [0.55, 0]);
 
-  const card: VocabCard = DECK[index];
+  const deck: VocabCard[] =
+    selectedLevel === 'all'
+      ? vocabulary
+      : selectedLevel
+      ? vocabulary.filter(v => v.level === selectedLevel)
+      : [];
+
+  const card = deck[index];
 
   const doSwipe = (direction: 'right' | 'left') => {
     if (swiping) return;
@@ -37,7 +45,7 @@ export default function MarktplatzSprint() {
         x.set(0);
         setFlipped(false);
         setSwiping(false);
-        if (next >= DECK.length) {
+        if (next >= deck.length) {
           markPracticeToday();
           setFinished(true);
         } else {
@@ -54,6 +62,78 @@ export default function MarktplatzSprint() {
     else animate(x, 0, { type: 'spring', stiffness: 400, damping: 30 });
   };
 
+  const startLevel = (level: LevelFilter) => {
+    setSelectedLevel(level);
+    setIndex(0);
+    setCorrect(0);
+    setTotal(0);
+    setFinished(false);
+    setFlipped(false);
+    x.set(0);
+  };
+
+  // ── Level picker ──
+  if (!selectedLevel) {
+    return (
+      <div className="min-h-screen bg-zinc-950 text-white flex flex-col items-center justify-center px-6">
+        <Link href="/" className="absolute top-12 left-5 text-zinc-500 text-sm font-medium">
+          ← Zurück
+        </Link>
+        <div className="text-6xl mb-4">🛒</div>
+        <h1 className="text-3xl font-bold mb-2 text-center">Marktplatz Sprint</h1>
+        <p className="text-zinc-400 text-base mb-10 text-center">
+          Lerne Artikel auf Deutsch
+        </p>
+        <div className="w-full max-w-xs space-y-3">
+          <button
+            onClick={() => startLevel('A1')}
+            className="w-full bg-zinc-900 border border-zinc-700 rounded-2xl p-5 text-left active:scale-95 transition-transform"
+          >
+            <div className="text-xs font-semibold text-green-400 bg-green-400/10 px-2 py-0.5 rounded-full inline-block mb-2">
+              A1
+            </div>
+            <div className="font-bold text-white text-lg">Grundwortschatz</div>
+            <div className="text-zinc-500 text-sm">der Markt, die Straße, das Haus…</div>
+          </button>
+
+          <button
+            onClick={() => startLevel('A2')}
+            className="w-full bg-zinc-900 border border-zinc-700 rounded-2xl p-5 text-left active:scale-95 transition-transform"
+          >
+            <div className="text-xs font-semibold text-blue-400 bg-blue-400/10 px-2 py-0.5 rounded-full inline-block mb-2">
+              A2
+            </div>
+            <div className="font-bold text-white text-lg">Alltagswortschatz</div>
+            <div className="text-zinc-500 text-sm">der Bahnhof, die Apotheke…</div>
+          </button>
+
+          <button
+            onClick={() => startLevel('B1')}
+            className="w-full bg-zinc-900 border border-zinc-700 rounded-2xl p-5 text-left active:scale-95 transition-transform"
+          >
+            <div className="text-xs font-semibold text-purple-400 bg-purple-400/10 px-2 py-0.5 rounded-full inline-block mb-2">
+              B1
+            </div>
+            <div className="font-bold text-white text-lg">Fortgeschrittenes</div>
+            <div className="text-zinc-500 text-sm">der Mietvertrag, die Behörde…</div>
+          </button>
+
+          <button
+            onClick={() => startLevel('all')}
+            className="w-full bg-amber-500 rounded-2xl p-5 text-left active:scale-95 transition-transform"
+          >
+            <div className="text-xs font-semibold text-black/60 bg-black/10 px-2 py-0.5 rounded-full inline-block mb-2">
+              A1 + A2 + B1
+            </div>
+            <div className="font-bold text-black text-lg">Alles auf einmal</div>
+            <div className="text-black/60 text-sm">Alle 150 Karten</div>
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // ── Results screen ──
   if (finished) {
     const pct = Math.round((correct / total) * 100);
     const emoji = pct >= 80 ? '🎉' : pct >= 50 ? '💪' : '📚';
@@ -65,22 +145,46 @@ export default function MarktplatzSprint() {
         <p className="text-zinc-400 text-lg mb-1">{correct} von {total} gewusst</p>
         <p className="text-amber-400 text-5xl font-bold mb-10">{pct}%</p>
         <button
-          onClick={() => { setIndex(0); setCorrect(0); setTotal(0); setFinished(false); setFlipped(false); x.set(0); }}
-          className="w-full max-w-xs bg-amber-500 text-black font-bold py-4 rounded-2xl text-lg mb-6"
+          onClick={() => {
+            setIndex(0);
+            setCorrect(0);
+            setTotal(0);
+            setFinished(false);
+            setFlipped(false);
+            x.set(0);
+          }}
+          className="w-full max-w-xs bg-amber-500 text-black font-bold py-4 rounded-2xl text-lg mb-3"
         >
           Nochmal spielen
+        </button>
+        <button
+          onClick={() => setSelectedLevel(null)}
+          className="w-full max-w-xs bg-zinc-900 border border-zinc-700 text-white font-semibold py-4 rounded-2xl text-lg mb-6"
+        >
+          Niveau wählen
         </button>
         <Link href="/" className="text-zinc-500 text-sm">← Zurück zur Übersicht</Link>
       </div>
     );
   }
 
+  // ── Level badge colours ──
+  const levelLabel = selectedLevel === 'all' ? 'A1 + A2 + B1' : selectedLevel;
+  const levelColour =
+    selectedLevel === 'A1'
+      ? 'text-green-400 bg-green-400/10'
+      : selectedLevel === 'A2'
+      ? 'text-blue-400 bg-blue-400/10'
+      : selectedLevel === 'B1'
+      ? 'text-purple-400 bg-purple-400/10'
+      : 'text-amber-400 bg-amber-500/10';
+
   return (
     <div className="min-h-screen bg-zinc-950 text-white flex flex-col select-none" style={{ touchAction: 'none' }}>
       <div className="flex items-center justify-between px-5 pt-12 pb-3">
         <Link href="/" className="text-zinc-500 text-sm font-medium">← Zurück</Link>
         <div className="flex items-center gap-3 text-sm">
-          <span className="text-zinc-500">{index + 1} / {DECK.length}</span>
+          <span className="text-zinc-500">{index + 1} / {deck.length}</span>
           <span className="text-amber-400 font-bold">{correct} ✓</span>
         </div>
       </div>
@@ -88,13 +192,13 @@ export default function MarktplatzSprint() {
       <div className="mx-5 h-1 bg-zinc-800 rounded-full overflow-hidden">
         <div
           className="h-full bg-amber-500 rounded-full transition-all duration-300"
-          style={{ width: `${(index / DECK.length) * 100}%` }}
+          style={{ width: `${(index / deck.length) * 100}%` }}
         />
       </div>
 
       <div className="flex-1 flex flex-col items-center justify-center px-6 pb-8">
-        <div className="text-xs font-semibold text-amber-400 bg-amber-500/10 px-3 py-1 rounded-full mb-6 tracking-wider">
-          A1 NIVEAU
+        <div className={`text-xs font-semibold px-3 py-1 rounded-full mb-6 tracking-wider ${levelColour}`}>
+          {levelLabel} NIVEAU
         </div>
 
         <motion.div
