@@ -253,7 +253,7 @@ export default function QuadrateNavigator() {
                 </p>
                 <div className="mt-2 pt-3 border-t border-zinc-700 w-full">
                   <p className="text-zinc-400 text-sm text-center italic">
-                    „{card.example}"
+                    {`„${card.example}"`}
                   </p>
                   <p className="text-zinc-600 text-xs text-center mt-1">
                     ({card.exampleTranslation})

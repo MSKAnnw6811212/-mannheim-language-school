@@ -1,4 +1,5 @@
 'use client';
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -345,7 +346,7 @@ export default function AudioBestellung() {
                   {isCorrect ? '✓ Sehr gut!' : '✗ Nochmal versuchen'}
                 </p>
                 {transcript ? (
-                  <p className="text-zinc-300 text-sm italic">„{transcript}"</p>
+                  <p className="text-zinc-300 text-sm italic">{`„${transcript}"`}</p>
                 ) : null}
               </div>
 
