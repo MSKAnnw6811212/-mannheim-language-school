@@ -1,4 +1,8 @@
+'use client';
+
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { getStreak } from '@/lib/streak';
 
 const features = [
   {
@@ -23,15 +27,21 @@ const features = [
     active: true,
   },
   {
-    href: '#',
+    href: '/audio',
     emoji: '🎤',
     title: 'Audio-Bestellung',
     subtitle: 'Sprich Deutsch',
-    active: false,
+    active: true,
   },
 ];
 
 export default function Home() {
+  const [streak, setStreak] = useState(0);
+
+  useEffect(() => {
+    setStreak(getStreak());
+  }, []);
+
   return (
     <main className="min-h-screen bg-zinc-950 text-white flex flex-col items-center px-4 py-16 max-w-md mx-auto">
       <div className="text-center mb-12">
@@ -40,6 +50,12 @@ export default function Home() {
           Mannheim<br />Deutsch
         </h1>
         <p className="text-zinc-500 mt-3 text-base">Dein Deutsch. Deine Stadt.</p>
+
+        {streak > 0 && (
+          <div className="mt-5 inline-flex items-center gap-2 bg-orange-500/10 border border-orange-500/30 text-orange-400 px-4 py-2 rounded-full text-sm font-semibold">
+            🔥 {streak} {streak === 1 ? 'Tag' : 'Tage'} in Folge
+          </div>
+        )}
       </div>
 
       <div className="w-full space-y-3">

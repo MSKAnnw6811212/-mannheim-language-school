@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { scenarios } from '@/lib/scenarios';
 import type { Option } from '@/lib/scenarios';
+import { markPracticeToday } from '@/lib/streak';
 
 export default function ScenarioPage({ params }: { params: { id: string } }) {
   const scenario = scenarios.find(s => s.id === params.id);
@@ -44,6 +45,7 @@ export default function ScenarioPage({ params }: { params: { id: string } }) {
     if (isLastStep) {
       const pct = Math.round((correctCount / totalChoices) * 100);
       saveScore(pct);
+      markPracticeToday();
       setFinished(true);
     } else {
       setStepIndex(i => i + 1);

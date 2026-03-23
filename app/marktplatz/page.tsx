@@ -5,6 +5,7 @@ import { motion, useMotionValue, useTransform, animate } from 'framer-motion';
 import Link from 'next/link';
 import { vocabulary } from '@/lib/vocabulary';
 import type { VocabCard } from '@/lib/vocabulary';
+import { markPracticeToday } from '@/lib/streak';
 
 const DECK = vocabulary.filter(v => v.level === 'A1');
 
@@ -37,6 +38,7 @@ export default function MarktplatzSprint() {
         setFlipped(false);
         setSwiping(false);
         if (next >= DECK.length) {
+          markPracticeToday();
           setFinished(true);
         } else {
           setIndex(next);

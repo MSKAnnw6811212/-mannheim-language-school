@@ -5,6 +5,7 @@ import { motion, useMotionValue, useTransform, animate } from 'framer-motion';
 import Link from 'next/link';
 import { directions } from '@/lib/directions';
 import type { DirectionCard } from '@/lib/directions';
+import { markPracticeToday } from '@/lib/streak';
 
 type LevelFilter = 'A1' | 'A2' | 'all';
 
@@ -45,6 +46,7 @@ export default function QuadrateNavigator() {
         setFlipped(false);
         setSwiping(false);
         if (next >= deck.length) {
+          markPracticeToday();
           setFinished(true);
         } else {
           setIndex(next);
