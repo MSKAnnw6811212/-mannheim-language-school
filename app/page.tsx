@@ -16,11 +16,11 @@ const features = [
     active: true,
   },
   {
-    href: '#',
+    href: '/quadrate',
     emoji: '🗺️',
     title: 'Quadrate Navigator',
     subtitle: 'Richtungen spielen',
-    active: false,
+    active: true,
   },
   {
     href: '#',
