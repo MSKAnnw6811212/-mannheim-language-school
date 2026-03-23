@@ -9,11 +9,11 @@ const features = [
     active: true,
   },
   {
-    href: '#',
+    href: '/vrn',
     emoji: '🚊',
     title: 'VRN Survival Mode',
     subtitle: 'Transit-Deutsch',
-    active: false,
+    active: true,
   },
   {
     href: '#',
