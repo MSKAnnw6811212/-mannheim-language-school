@@ -28,10 +28,26 @@ export default function ScenarioPage({ params }: { params: { id: string } }) {
   const isLastStep = stepIndex === scenario.steps.length - 1;
   const totalChoices = scenario.steps.filter(s => s.type === 'choice').length;
 
+  const saveScore = (pct: number) => {
+    try {
+      const stored = localStorage.getItem('vrn-completions');
+      const comps = stored ? JSON.parse(stored) : {};
+      if (comps[scenario.id] === undefined || pct > comps[scenario.id]) {
+        comps[scenario.id] = pct;
+        localStorage.setItem('vrn-completions', JSON.stringify(comps));
+      }
+    } catch {}
+  };
+
   const advance = () => {
     setSelectedOption(null);
-    if (isLastStep) { setFinished(true); }
-    else { setStepIndex(i => i + 1); }
+    if (isLastStep) {
+      const pct = Math.round((correctCount / totalChoices) * 100);
+      saveScore(pct);
+      setFinished(true);
+    } else {
+      setStepIndex(i => i + 1);
+    }
   };
 
   const handleSelect = (option: Option) => {
@@ -47,7 +63,7 @@ export default function ScenarioPage({ params }: { params: { id: string } }) {
         <div className="text-7xl mb-4">{pct >= 80 ? '🎉' : pct >= 50 ? '💪' : '📚'}</div>
         <h2 className="text-2xl font-bold mb-2">Szenario abgeschlossen!</h2>
         <p className="text-zinc-400 mb-1">{correctCount} von {totalChoices} richtig</p>
-        <p className="text-amber-400 text-4xl font-bold mb-8">{pct}%</p>
+        <p className="text-amber-400 text-5xl font-bold mb-8">{pct}%</p>
         <Link href="/vrn" className="w-full max-w-xs bg-amber-500 text-black font-bold py-4 rounded-2xl text-lg text-center block mb-4">
           Weitere Szenarien
         </Link>
@@ -95,7 +111,6 @@ export default function ScenarioPage({ params }: { params: { id: string } }) {
                 <p className="text-zinc-500 text-sm mt-2 italic">{currentStep.translation}</p>
               </div>
             )}
-
             {currentStep.type === 'npc' && (
               <div className="mb-4">
                 <div className="flex items-center gap-2 mb-2">
@@ -108,7 +123,6 @@ export default function ScenarioPage({ params }: { params: { id: string } }) {
                 </div>
               </div>
             )}
-
             {currentStep.type === 'choice' && (
               <div className="space-y-3">
                 <p className="text-zinc-500 text-sm mb-3">Wie antwortest du?</p>
@@ -120,12 +134,8 @@ export default function ScenarioPage({ params }: { params: { id: string } }) {
                   if (revealed && isSelected && !option.correct) style = 'bg-red-500/20 border-red-500 text-red-300';
                   if (revealed && !isSelected && option.correct) style = 'bg-green-500/10 border-green-500/40 text-green-400/70';
                   return (
-                    <button
-                      key={i}
-                      onClick={() => handleSelect(option)}
-                      disabled={!!selectedOption}
-                      className={`w-full text-left p-4 rounded-2xl border transition-all active:scale-98 ${style}`}
-                    >
+                    <button key={i} onClick={() => handleSelect(option)} disabled={!!selectedOption}
+                      className={`w-full text-left p-4 rounded-2xl border transition-all ${style}`}>
                       <div className="font-medium leading-snug">{option.text}</div>
                       <div className="text-sm opacity-60 mt-0.5">{option.translation}</div>
                     </button>
@@ -133,13 +143,9 @@ export default function ScenarioPage({ params }: { params: { id: string } }) {
                 })}
               </div>
             )}
-
             {selectedOption && (
-              <motion.div
-                initial={{ opacity: 0, y: 6 }}
-                animate={{ opacity: 1, y: 0 }}
-                className={`mt-4 p-4 rounded-2xl border ${selectedOption.correct ? 'bg-green-500/10 border-green-500/30' : 'bg-red-500/10 border-red-500/30'}`}
-              >
+              <motion.div initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }}
+                className={`mt-4 p-4 rounded-2xl border ${selectedOption.correct ? 'bg-green-500/10 border-green-500/30' : 'bg-red-500/10 border-red-500/30'}`}>
                 <p className={`font-bold mb-1 ${selectedOption.correct ? 'text-green-400' : 'text-red-400'}`}>
                   {selectedOption.correct ? '✓ Richtig!' : '✗ Nicht ganz'}
                 </p>
@@ -152,10 +158,8 @@ export default function ScenarioPage({ params }: { params: { id: string } }) {
 
       {(currentStep.type !== 'choice' || selectedOption) && (
         <div className="px-5 pb-10">
-          <button
-            onClick={advance}
-            className="w-full bg-amber-500 text-black font-bold py-4 rounded-2xl active:scale-95 transition-transform"
-          >
+          <button onClick={advance}
+            className="w-full bg-amber-500 text-black font-bold py-4 rounded-2xl active:scale-95 transition-transform">
             {isLastStep ? 'Fertig! →' : 'Weiter →'}
           </button>
         </div>
