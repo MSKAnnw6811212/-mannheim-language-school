@@ -45,8 +45,8 @@ export default function VRNPage() {
               {items.map(scenario => {
                 const best = completions[scenario.id];
                 return (
-                  <Link key={scenario.id} href={`/vrn/${scenario.id}`} className="block touch-pan-y">
-                    <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-5 flex items-center gap-4 active:scale-95 transition-transform">
+                  <Link key={scenario.id} href={`/vrn/${scenario.id}`} className="block">
+                    <div style={{ touchAction: 'pan-y' }} className="bg-zinc-900 border border-zinc-800 rounded-2xl p-5 flex items-center gap-4">
                       <span className="text-4xl">{scenario.emoji}</span>
                       <div className="flex-1 min-w-0">
                         <div className="font-bold text-white text-base leading-tight">{scenario.title}</div>

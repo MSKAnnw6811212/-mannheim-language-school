@@ -87,7 +87,7 @@ export default function MarktplatzSprint() {
         <div className="w-full max-w-xs space-y-3">
           <button
             onClick={() => startLevel('A1')}
-            className="w-full bg-zinc-900 border border-zinc-700 rounded-2xl p-5 text-left active:scale-95 transition-transform"
+            className="w-full bg-zinc-900 border border-zinc-700 rounded-2xl p-5 text-left"
           >
             <div className="text-xs font-semibold text-green-400 bg-green-400/10 px-2 py-0.5 rounded-full inline-block mb-2">
               A1
@@ -98,7 +98,7 @@ export default function MarktplatzSprint() {
 
           <button
             onClick={() => startLevel('A2')}
-            className="w-full bg-zinc-900 border border-zinc-700 rounded-2xl p-5 text-left active:scale-95 transition-transform"
+            className="w-full bg-zinc-900 border border-zinc-700 rounded-2xl p-5 text-left "
           >
             <div className="text-xs font-semibold text-blue-400 bg-blue-400/10 px-2 py-0.5 rounded-full inline-block mb-2">
               A2
@@ -109,7 +109,7 @@ export default function MarktplatzSprint() {
 
           <button
             onClick={() => startLevel('B1')}
-            className="w-full bg-zinc-900 border border-zinc-700 rounded-2xl p-5 text-left active:scale-95 transition-transform"
+            className="w-full bg-zinc-900 border border-zinc-700 rounded-2xl p-5 text-left "
           >
             <div className="text-xs font-semibold text-purple-400 bg-purple-400/10 px-2 py-0.5 rounded-full inline-block mb-2">
               B1
@@ -120,7 +120,7 @@ export default function MarktplatzSprint() {
 
           <button
             onClick={() => startLevel('all')}
-            className="w-full bg-amber-500 rounded-2xl p-5 text-left active:scale-95 transition-transform"
+            className="w-full bg-amber-500 rounded-2xl p-5 text-left "
           >
             <div className="text-xs font-semibold text-black/60 bg-black/10 px-2 py-0.5 rounded-full inline-block mb-2">
               A1 + A2 + B1
