@@ -27,48 +27,49 @@ export default function VRNPage() {
   })).filter(g => g.items.length > 0);
 
   return (
-    <main className="min-h-screen bg-zinc-950 text-white px-4 py-12 max-w-md mx-auto">
-      <Link href="/" className="text-zinc-500 text-sm mb-8 block">← Zurück</Link>
-      <div className="mb-8">
-        <div className="text-4xl mb-3">🚊</div>
-        <h1 className="text-3xl font-bold">VRN Survival Mode</h1>
-        <p className="text-zinc-500 mt-2 text-sm">Meistere den öffentlichen Nahverkehr in Mannheim.</p>
-      </div>
+    <div className="bg-zinc-950 text-white" style={{ height: '100dvh', overflowY: 'scroll', WebkitOverflowScrolling: 'touch' } as React.CSSProperties}>
+      <main className="px-4 py-12 max-w-md mx-auto">
+        <Link href="/" className="text-zinc-500 text-sm mb-8 block">← Zurück</Link>
+        <div className="mb-8">
+          <div className="text-4xl mb-3">🚊</div>
+          <h1 className="text-3xl font-bold">VRN Survival Mode</h1>
+          <p className="text-zinc-500 mt-2 text-sm">Meistere den öffentlichen Nahverkehr in Mannheim.</p>
+        </div>
 
-      <div className="space-y-8">
-        {levels.map(({ level, config, items }) => (
-          <div key={level}>
-            <p className={`text-xs font-bold tracking-widest uppercase mb-3 ${config.colour}`}>
-              {config.label}
-            </p>
-            <div className="space-y-3">
-              {items.map(scenario => {
-                const best = completions[scenario.id];
-                return (
-                  <Link key={scenario.id} href={`/vrn/${scenario.id}`} className="block">
-                    <div style={{ touchAction: 'pan-y' }} className="bg-zinc-900 border border-zinc-800 rounded-2xl p-5 flex items-center gap-4">
-                      <span className="text-4xl">{scenario.emoji}</span>
-                      <div className="flex-1 min-w-0">
-                        <div className="font-bold text-white text-base leading-tight">{scenario.title}</div>
-                        <div className="text-zinc-500 text-xs mt-0.5 truncate">{scenario.setting}</div>
+        <div className="space-y-8">
+          {levels.map(({ level, config, items }) => (
+            <div key={level}>
+              <p className={`text-xs font-bold tracking-widest uppercase mb-3 ${config.colour}`}>
+                {config.label}
+              </p>
+              <div className="space-y-3">
+                {items.map(scenario => {
+                  const best = completions[scenario.id];
+                  return (
+                    <Link key={scenario.id} href={`/vrn/${scenario.id}`} className="block">
+                      <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-5 flex items-center gap-4">
+                        <span className="text-4xl">{scenario.emoji}</span>
+                        <div className="flex-1 min-w-0">
+                          <div className="font-bold text-white text-base leading-tight">{scenario.title}</div>
+                          <div className="text-zinc-500 text-xs mt-0.5 truncate">{scenario.setting}</div>
+                        </div>
+                        <div className="flex flex-col items-end gap-1 shrink-0">
+                          <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${config.badge}`}>
+                            {level}
+                          </span>
+                          {best !== undefined && (
+                            <span className="text-xs text-amber-400 font-medium">✓ {best}%</span>
+                          )}
+                        </div>
                       </div>
-                      <div className="flex flex-col items-end gap-1 shrink-0">
-                        <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${config.badge}`}>
-                          {level}
-                        </span>
-                        {best !== undefined && (
-                          <span className="text-xs text-amber-400 font-medium">✓ {best}%</span>
-                        )}
-                      </div>
-                    </div>
-                  </Link>
-                );
-              })}
+                    </Link>
+                  );
+                })}
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
-
-    </main>
+          ))}
+        </div>
+      </main>
+    </div>
   );
 }
