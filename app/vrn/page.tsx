@@ -27,7 +27,7 @@ export default function VRNPage() {
   })).filter(g => g.items.length > 0);
 
   return (
-    <main className="min-h-screen bg-zinc-950 text-white flex flex-col px-4 py-12 max-w-md mx-auto">
+    <main className="min-h-screen bg-zinc-950 text-white px-4 py-12 max-w-md mx-auto">
       <Link href="/" className="text-zinc-500 text-sm mb-8 block">← Zurück</Link>
       <div className="mb-8">
         <div className="text-4xl mb-3">🚊</div>
